@@ -1,32 +1,48 @@
-import React from 'react';
-import { useEffect } from 'react';
-export default function DownloadImage({ setHitDownload , onDownload  , imageUrl , settings , setShowToast}) {
-useEffect(() => {
-  const handleEsc = e => {
-    if (e.key === 'Escape') setHitDownload(false);
-  };
-  window.addEventListener('keydown', handleEsc);
-  return () => window.removeEventListener('keydown', handleEsc);
-}, []);
+// src/components/output/DownloadImage.jsx
+import React, { useEffect } from "react";
+import { RefreshCw } from "lucide-react";
 
-  const handleDownloadCopy = async () => {
+export default function DownloadImage({
+  setHitDownload,
+  onDownload,
+  onRefreshPreview,
+  imageUrl,
+  isStale,
+  settings,
+  showToastMessage,
+}) {
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setHitDownload(false);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [setHitDownload]);
+
+  const handleDownload = async (withCopy = false) => {
     try {
-     await onDownload()
+      await onDownload();
+      if (withCopy && settings.autoCopy) {
+        showToastMessage?.("Copied to clipboard!", "success");
+      }
     } catch (error) {
-      console.error('Export failed', error);
+      console.error("Export failed", error);
+      showToastMessage?.("Couldn't save the image — try again.", "error");
     } finally {
-     if(settings.autoCopy) setShowToast(true);
-   }
-}
+      setHitDownload(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      {/* main panel */}
       <div className="w-full max-w-xl bg-white text-black rounded-xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200 font-outfit">
         <div className="flex items-center justify-between border-b px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-800">Preview & Download Image</h2>
+          <h2 className="text-lg font-semibold text-gray-800">
+            Preview & Download Image
+          </h2>
           <button
             onClick={() => setHitDownload(false)}
-            className="text-black  transition-colors rounded-full p-1 cursor-pointer "
+            className="text-black transition-colors rounded-full p-1 cursor-pointer"
             aria-label="Close"
           >
             <svg
@@ -46,8 +62,7 @@ useEffect(() => {
           </button>
         </div>
 
-        {/* preview */}
-        <div className="p-6 bg-gray-50 flex items-center justify-center min-h-[250px]">
+        <div className="p-6 bg-gray-50 flex flex-col items-center justify-center min-h-[250px] gap-3">
           {imageUrl ? (
             <img
               src={imageUrl}
@@ -73,20 +88,28 @@ useEffect(() => {
               <p className="text-sm">No preview available</p>
             </div>
           )}
+          {isStale && onRefreshPreview && (
+            <button
+              onClick={onRefreshPreview}
+              className="flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-300 rounded-full px-3 py-1 hover:bg-amber-100 transition-colors cursor-pointer"
+            >
+              <RefreshCw size={12} />
+              Text changed — refresh preview
+            </button>
+          )}
         </div>
 
-        {/* bottom */}
-        <div className="flex items-center justify-end gap-3 border-t px-6 py-4 bg-white">
+        <div className="flex items-center justify-end gap-3 border-t px-6 py-4 bg-white flex-wrap">
           <button
             onClick={() => setHitDownload(false)}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none  cursor-pointer transition-all"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none cursor-pointer transition-all"
           >
             Cancel
           </button>
 
           {settings.autoCopy && (
             <button
-              onClick={handleDownloadCopy}
+              onClick={() => handleDownload(true)}
               disabled={!imageUrl}
               className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed focus:outline-none cursor-pointer"
             >
@@ -109,9 +132,7 @@ useEffect(() => {
           )}
 
           <button
-            onClick={() => {
-              onDownload();
-            }}
+            onClick={() => handleDownload(false)}
             disabled={!imageUrl}
             className="flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed focus:outline-none cursor-pointer"
           >

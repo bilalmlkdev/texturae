@@ -1,51 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import Header from './layouts/Header';
-import MainLayout from './layouts/MainLayout';
-import About from './sections/About';
-import Settings from './sections/Settings';
-import TestAll from './sections/TestAll';
-import { renderFormattedText } from './utils/transformers';
-import { Plus } from 'lucide-react';
-
-// useLocalStorage hook
-import useLocalStorage from './hooks/useLocalStorage';
+// src/App.jsx
+import React, {
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import Header from "./components/layouts/Header";
+import MainLayout from "./components/layouts/MainLayout";
+import About from "./components/sections/About";
+import Settings from "./components/sections/Settings";
+import TestAll from "./components/sections/TestAll";
+import History from "./components/sections/History";
+import { renderFormattedText } from "./utils/transformers";
+import useLocalStorage from "./hooks/useLocalStorage";
+import Toast from "./components/ui/Toast";
+import { parseShareParams } from "./utils/urlParams";
 
 export default function App() {
-  // saving to local storage all settings
-  const [settings, setSettings] = useLocalStorage('asciiara_settings', {
+  // Read URL params on mount
+  const { text: urlText, style: urlStyle } = parseShareParams();
+
+  const [settings, setSettings] = useLocalStorage("texturae_settings", {
     fontSize: 54,
     mono: true,
     autoCopy: false,
     watermark: false,
     themeToggle: true,
+    favorites: [],
+    history: [],
+    maxHistory: 5,
   });
-
-  const [inputTxt, setInputText] = useLocalStorage('asciiara_draft', 'Type Something cool.');
-  const [options, setOptions] = useLocalStorage('asciiara_last_filter', 'script');
-
-  // all states
-  const [showSection, setShowSection] = useLocalStorage('asciiara_section', 'main');
-  const [filters, setFilters] = useLocalStorage('asciiara_filters', 'none');
+  const [inputTxt, setInputText] = useLocalStorage(
+    "texturae_draft",
+    urlText || "Type Something cool.",
+  );
+  const [options, setOptions] = useLocalStorage(
+    "texturae_last_tool",
+    urlStyle || "doubleStruck",
+  );
+  const [showSection, setShowSection] = useLocalStorage(
+    "texturae_section",
+    "main",
+  );
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("Copied to clipboard!");
+  const [toastType, setToastType] = useState("success");
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // new state
 
+  // Compute whether raw input exists (trimmed)
+  const hasInput = inputTxt.trim() !== "";
 
+  // Memoize output (no combine)
+  const textWithOptions = useMemo(() => {
+    return renderFormattedText(options, inputTxt);
+  }, [options, inputTxt]);
 
+  // Toast helper
+  const showToastMessage = (message, type = "success") => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+  };
 
-  // transforming text based on selected options
-  let textWithOptions = renderFormattedText(options, inputTxt);
-
-  // toast
-  useEffect(() => {
-    if (showToast) {
-      const timer = setTimeout(() => setShowToast(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showToast]);
-
-  // loading animation time
-  useEffect(() => {
-    if (showSection === 'main') {
+  // Loader for section transitions (existing)
+  useLayoutEffect(() => {
+    if (showSection === "main") {
       setIsLoading(false);
       return;
     }
@@ -54,10 +75,46 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [showSection]);
 
+  // Initial load loader – shows for 1s on first mount
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoad(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Update history when tool changes
+  useEffect(() => {
+    if (options && options !== "none") {
+      setSettings((prev) => {
+        const history = [
+          options,
+          ...prev.history.filter((h) => h !== options),
+        ].slice(0, prev.maxHistory || 5);
+        return { ...prev, history };
+      });
+    }
+  }, [options, setSettings]);
+
+  const toggleFavorite = useCallback(
+    (tool) => {
+      setSettings((prev) => {
+        const favs = prev.favorites || [];
+        if (favs.includes(tool)) {
+          return { ...prev, favorites: favs.filter((f) => f !== tool) };
+        } else {
+          return { ...prev, favorites: [...favs, tool] };
+        }
+      });
+    },
+    [setSettings],
+  );
+
+  // Determine if loader should show
+  const showLoader = isInitialLoad || isLoading;
+
   return (
     <div
       className={`flex flex-col items-center w-full h-screen md:pt-2 md:gap-2 overflow-auto md:overflow-auto relative transition-colors duration-500 ${
-        settings.themeToggle ? 'bg-zinc-800' : 'bg-zinc-200'
+        settings.themeToggle ? "bg-zinc-800" : "bg-zinc-200"
       }`}
     >
       <Header
@@ -67,76 +124,83 @@ export default function App() {
         setOptions={setOptions}
         setShowSection={setShowSection}
         settings={settings}
+        setSettings={setSettings}
         output={textWithOptions}
+        hasInput={hasInput}
+        toggleFavorite={toggleFavorite}
       />
 
       <div
         className={`w-full h-full overflow-hidden transition-colors duration-500 ${
-          settings.themeToggle ? 'bg-zinc-950' : 'bg-white'
+          settings.themeToggle ? "bg-zinc-950" : "bg-white"
         }`}
       >
-        {/* loading  */}
-        {isLoading && (
+        {showLoader && (
           <div className="z-50 flex items-center justify-center bg-inherit backdrop-blur-md animate-in fade-in duration-300 w-full h-full">
             <div className="flex flex-col items-center gap-3">
               <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-600 rounded-full animate-spin"></div>
               <p
-                className={`text-sm font-medium animate-pulse ${!settings.themeToggle ? 'text-black' : 'text-white'}`}
+                className={`text-sm font-medium animate-pulse ${!settings.themeToggle ? "text-black" : "text-white"}`}
               >
-                Initialising {showSection}...
+                {isInitialLoad
+                  ? "Loading Texturae..."
+                  : `Initialising ${showSection}...`}
               </p>
             </div>
           </div>
         )}
 
-        {/* all section  */}
-        {!isLoading && (
+        {!showLoader && (
           <div className="h-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {showSection === 'main' && (
+            {showSection === "main" && (
               <MainLayout
                 output={textWithOptions}
                 setOptions={setOptions}
-                setShowToast={setShowToast}
+                showToastMessage={showToastMessage}
                 settings={settings}
-                filters={filters}
-                setFilters={setFilters}
-
               />
             )}
-            {showSection === 'about' && (
+            {showSection === "about" && (
               <About setShowSection={setShowSection} settings={settings} />
             )}
-            {showSection === 'settings' && (
+            {showSection === "settings" && (
               <Settings
                 setShowSection={setShowSection}
                 settings={settings}
                 setSettings={setSettings}
+                setInputText={setInputText}
+                setOptions={setOptions}
               />
             )}
-            {showSection === 'testall' && (
+            {showSection === "testall" && (
               <TestAll
                 setShowSection={setShowSection}
                 inputTxt={inputTxt}
-                setShowToast={setShowToast}
+                showToastMessage={showToastMessage}
                 setOptions={setOptions}
                 settings={settings}
+              />
+            )}
+            {showSection === "history" && (
+              <History
+                setShowSection={setShowSection}
+                settings={settings}
+                setSettings={setSettings}
+                setOptions={setOptions}
               />
             )}
           </div>
         )}
       </div>
 
-      {/* the toast */}
       {showToast && (
-        <div className="fixed bottom-5 right-8 bg-white border border-zinc-200 shadow-2xl text-[14px] text-black py-3 px-6 rounded-xl z-[999] animate-in slide-in-from-right-5 duration-300">
-          <button
-            className="absolute -top-2 -left-2 bg-red-600 h-6 w-6 rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
-            onClick={() => setShowToast(false)}
-          >
-            <Plus size={16} className="rotate-45 text-white" />
-          </button>
-          <h3 className="font-outfit font-medium">🤷‍♂️ Copied to clipboard!</h3>
-        </div>
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          duration={5000}
+          onClose={() => setShowToast(false)}
+          themeToggle={settings.themeToggle}
+        />
       )}
     </div>
   );

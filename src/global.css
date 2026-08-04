@@ -1,6 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 @theme {
   --font-outfit: "Outfit", sans-serif;
+}
+
+.dropdown-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dropdown-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+.dropdown-scroll::-webkit-scrollbar-thumb {
+  background: #52525b; /* zinc-600 */
+  border-radius: 8px;
+}
+.dropdown-scroll::-webkit-scrollbar-thumb:hover {
+  background: #71717a; /* zinc-500 */
+}
+/* For Firefox */
+.dropdown-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #52525b transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #52525b;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #52525b transparent;
+}
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
 }
