@@ -170,7 +170,7 @@ export default function Settings({
                 [&::-webkit-slider-thumb]:h-[16px]
                 [&::-webkit-slider-thumb]:w-[16px]
                 [&::-webkit-slider-thumb]:rounded-full
-                [&::-webkit-slider-thumb]:bg-[#9B26FF]
+                [&::-webkit-slider-thumb]:bg-blue-600
                 [&::-webkit-slider-thumb]:mt-[-5px]
               `}
             />
