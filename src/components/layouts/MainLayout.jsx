@@ -1,5 +1,5 @@
 // src/layouts/MainLayout.jsx
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import OutputArea from "../output/OutputArea";
 import ExportOptions from "../output/ExportOptions";
 import DownloadImage from "../output/DownloadImage";
@@ -51,9 +51,15 @@ export default function MainLayout({ output, showToastMessage, settings }) {
     link.click();
   };
 
-  if (hitDownload && output !== lastOutputRef.current && !isStale) {
-    setIsStale(true);
-  }
+  // Mark the preview stale once the user has generated one and then
+  // changed the pattern settings again — reacts to `output` changing,
+  // rather than mutating state directly during render.
+  useEffect(() => {
+    if (hitDownload && output !== lastOutputRef.current && !isStale) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsStale(true);
+    }
+  }, [output, hitDownload, isStale]);
 
   return (
     <div className="w-full h-full py-6 px-4 md:px-7 flex flex-col items-start overflow-x-auto">

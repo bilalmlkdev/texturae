@@ -31,6 +31,10 @@ export default function SearchableDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Reads real DOM layout (getBoundingClientRect) to decide whether the
+  // menu should open upward or downward — a genuine external-system
+  // read that can only happen after the DOM has painted, not derivable
+  // during render.
   useEffect(() => {
     if (isOpen && buttonRef.current && menuRef.current) {
       const buttonRect = buttonRef.current.getBoundingClientRect();
@@ -39,6 +43,7 @@ export default function SearchableDropdown({
       const spaceAbove = buttonRect.top;
 
       if (spaceBelow < menuHeight && spaceAbove > spaceBelow) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPlacement("top");
       } else {
         setPlacement("bottom");

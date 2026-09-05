@@ -8,7 +8,7 @@ const DEFAULT_SETTINGS = {
   mono: true,
   autoCopy: false,
   watermark: false,
-  themeToggle: true,
+  themeToggle: false,
   favorites: [],
   history: [],
   maxHistory: 5,

@@ -1,29 +1,25 @@
-<p align="center">
+<div align="center">
+
   <a href="https://texturae.vercel.app/">
-    <img src="./public/preview.png" alt="Texturae Preview">
+    <img src="https://raw.githubusercontent.com/bilalmlkdev/texturae/main/public/favicon.png" alt="texturae Logo" width="23%">
   </a>
-</p>
 
-<h1 align="center">Texturae</h1>
+# Texturae
 
-<p align="center">
-  A modern, open-source text transformation studio for creating beautiful Unicode text, developer-friendly encoders, ciphers, and formatting tools, all in one fast, browser-based workspace.
-</p>
+ A modern, open-source text transformation studio for creating beautiful Unicode text, <br> developer-friendly encoders, ciphers, and formatting tools, all in one fast, browser-based workspace.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Complete-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/React-Vite-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Tailwind-v4-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/JavaScript-ES6+-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/License-MIT-9B26FF?style=flat"/>
-  <img src="https://img.shields.io/badge/Deploy-Vercel-9B26FF?style=flat"/>
-</p>
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Site-black?style=for-the-badge)](https://texturae.vercel.app)
+[![GitHub Stars](https://img.shields.io/github/stars/bilalmlkdev/texturae?style=for-the-badge&logo=github&color=yellow)](https://github.com/bilalmlkdev/texturae.git)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
+
+</div>
 
 <p align="center">
-  <a href="https://texturae.vercel.app/">Live Demo</a> •
-  <a href="https://github.com/byllzz/texturae/issues/new">Report Bug</a> •
-  <a href="https://github.com/byllzz/texturae/issues/new">Request Feature</a>
+  <i>Created by <a href="https://bilalmlkdev.vercel.app" target="_blank">Bilal Malik</a></i><br>
+  <i>Follow on Github <a href="https://github.com/bilalmlkdev" target="_blank">bilalmlkdev</a></i>
 </p>
+
+[![texturae Dashboard](https://raw.githubusercontent.com/bilalmlkdev/texturae/main/public/preview.png)](https://texturae.vercel.app/)
 
 
 # About Texturae
@@ -164,78 +160,6 @@ Texturae is designed to remain responsive even when rendering dozens of transfor
 | **Client-Side Processing** | Zero network requests during transformations. |
 | **Optimized Rendering** | Smooth performance inside the Test All workspace. |
 
-# Built With
-
-Texturae is built with a modern frontend stack focused on performance, maintainability, and an excellent developer experience.
-
-| Technology | Purpose |
-|------------|---------|
-| **React** | Component-based UI architecture |
-| **Vite** | Fast development server and optimized production builds |
-| **Tailwind CSS v4** | Utility-first styling framework |
-| **JavaScript (ES6+)** | Application logic and transformation engine |
-| **Lucide React** | Modern icon library |
-| **React Icons** | Additional icon collections |
-| **html-to-image** | Export transformed text as PNG images |
-
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=react,vite,tailwind,js,git" />
-</p>
-
-# Getting Started
-
-Running Texturae locally only takes a few minutes.
-
-## Prerequisites
-
-Before getting started, make sure you have the following installed:
-
-- Node.js (latest LTS recommended)
-- npm or Yarn
-- A modern web browser such as Chrome, Edge, Firefox, or Safari
-
-## Installation
-
-Clone the repository.
-
-```bash
-git clone https://github.com/byllzz/texturae.git
-```
-
-Move into the project directory.
-
-```bash
-cd texturae
-```
-
-Install all project dependencies.
-
-```bash
-npm install
-```
-
-Start the development server.
-
-```bash
-npm run dev
-```
-
-Once the development server is running, open your browser and navigate to the local address displayed in the terminal.
-
-## Production Build
-
-Generate an optimized production build using:
-
-```bash
-npm run build
-```
-
-To preview the production build locally:
-
-```bash
-npm run preview
-```
-
 # Contributing
 
 Contributions of every size are welcome.
@@ -281,31 +205,9 @@ Once registered, the tool automatically becomes available throughout the applica
 
 
 
-# Author
-
-<img src="https://github.com/byllzz.png" width="90" alt="Bilal Malik"/>
-
-## Bilal Malik
-
-[![GitHub](https://img.shields.io/badge/GitHub-byllzz-9B26FF?style=flat&logo=github&logoColor=white)](https://github.com/byllzz)
-[![X](https://img.shields.io/badge/X-@bilalmlkdev-9B26FF?style=flat&logo=x&logoColor=white)](https://x.com/bilalmlkdev)
-[![Portfolio](https://img.shields.io/badge/Portfolio-bilalmlkdev.vercel.app-9B26FF?style=flat&logo=vercel&logoColor=white)](https://bilalmlkdev.vercel.app)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Bilal%20Malik-9B26FF?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/bilalmlkdev/)
-[![Email](https://img.shields.io/badge/Email-bilalmlkdev@gmail.com-9B26FF?style=flat&logo=gmail&logoColor=white)](mailto:bilalmlkdev@gmail.com)
-
-If you enjoyed this project, consider giving it a ⭐ on GitHub. It helps others discover the project and motivates future improvements.
-
-<p align="right">
-  <a href="#texturae">⬆ Back to Top</a>
-</p>
-
 # License (MIT)
 
-
-
 This project is licensed under the **MIT License**.
-
-
 
 ```text
 
@@ -329,5 +231,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ```
-
-© 2026 texturae. Licensed under the MIT License.

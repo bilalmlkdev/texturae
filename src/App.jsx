@@ -26,7 +26,7 @@ export default function App() {
     mono: true,
     autoCopy: false,
     watermark: false,
-    themeToggle: true,
+    themeToggle: false,
     favorites: [],
     history: [],
     maxHistory: 5,
@@ -64,9 +64,11 @@ export default function App() {
     setShowToast(true);
   };
 
-  // Loader for section transitions (existing)
+  // Loader for section transitions — reacts to showSection changing (an
+  // external navigation event), not state derived during render.
   useLayoutEffect(() => {
     if (showSection === "main") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(false);
       return;
     }

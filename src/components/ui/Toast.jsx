@@ -28,7 +28,7 @@ export default function Toast({
   type = "success",
   duration = 1000,
   onClose,
-  themeToggle = true,
+  themeToggle = false,
 }) {
   const [progress, setProgress] = useState(100);
 

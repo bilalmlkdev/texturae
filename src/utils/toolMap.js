@@ -132,7 +132,7 @@ export const morseEncodeMap = (text) =>
 const splitWords = (text) =>
   text
     .replace(/([a-z])([A-Z])/g, "$1 $2") // camelCase boundary
-    .replace(/[_\-]+/g, " ") // snake/kebab boundary
+    .replace(/[_-]+/g, " ") // snake/kebab boundary
     .trim()
     .split(/\s+/)
     .filter(Boolean);
