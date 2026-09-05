@@ -1,7 +1,7 @@
 <div align="center">
 
   <a href="https://texturae.vercel.app/">
-    <img src="https://raw.githubusercontent.com/bilalmlkdev/texturae/main/public/favicon.png" alt="texturae Logo" width="23%">
+    <img src="https://raw.githubusercontent.com/bilalmlkdev/texturae/main/public/favicon.png" alt="texturae Logo" width="20%">
   </a>
 
 # Texturae
